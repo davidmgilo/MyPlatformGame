@@ -26,8 +26,13 @@ export default class extends Phaser.State {
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    //   this.scale.pageAlignHorizontally = true;
-    //   this.scale.pageAlignVertically = true;
+    this.scale.pageAlignHorizontally = true;
+    this.scale.pageAlignVertically = true;
+
+    this.game.input.keyboard.addKey(Phaser.Keyboard.W);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.A);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.D);
   }
 
   render () {

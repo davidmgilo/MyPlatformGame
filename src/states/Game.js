@@ -7,6 +7,7 @@ export default class extends Phaser.State {
   preload () {
       this.game.load.tilemap('level1', './assets/tilemaps/level1.json', null, Phaser.Tilemap.TILED_JSON);
       this.game.load.image('tiles', './assets/images/tiles_spritesheet.png');
+      this.game.load.spritesheet('player', 'assets/images/r1sht.png', 81, 82)
   }
 
   create () {
@@ -37,26 +38,37 @@ export default class extends Phaser.State {
       //resizes the game world to match the layer dimensions
       this.backgroundlayer.resizeWorld();
 
-      // this.map.setCollisionBetween(1, 1000, true, 'blockedLayer');
+      this.map.setCollisionBetween(1, 1000, true, 'blockedLayer');
 
+      this.player = this.game.add.sprite(300, 200, 'player');
+
+      this.player.animations.add('idle',[8,9,9,10,10,11,11,12,12],8,true)
+
+      game.physics.arcade.enable(this.player)
+      this.player.body.gravity.y = 600
+
+      this.player.animations.play('idle')
+      //player.animations.play('attack', 60, false);
       this.cursors = game.input.keyboard.createCursorKeys();
   }
 
   update () {
-      if (this.cursors.up.isDown)
+      this.game.physics.arcade.collide(this.player,this.blockedLayer)
+
+      if (this.game.input.keyboard.isDown(Phaser.Keyboard.W))
       {
           game.camera.y -= 4;
       }
-      else if (this.cursors.down.isDown)
+      else if (this.game.input.keyboard.isDown(Phaser.Keyboard.S))
       {
           game.camera.y += 4;
       }
 
-      if (this.cursors.left.isDown)
+      if (this.game.input.keyboard.isDown(Phaser.Keyboard.A))
       {
           game.camera.x -= 4;
       }
-      else if (this.cursors.right.isDown)
+      else if (this.game.input.keyboard.isDown(Phaser.Keyboard.D))
       {
           game.camera.x += 4;
       }
