@@ -43,10 +43,11 @@ export default class extends Phaser.State {
       this.player = this.game.add.sprite(300, 200, 'player');
 
       this.player.scale.set(0.7,0.7)
+      this.player.anchor.set(0.5,0.5)
 
       this.player.animations.add('idle',[8,9,9,10,10,11,11,12,12],8,true)
 
-      this.player.animations.add('moveRight',[0,1,2,3,4,5,6,7,8],10,true)
+      this.player.animations.add('move',[0,1,2,3,4,5,6,7,8],10,true)
 
       game.physics.arcade.enable(this.player)
       this.player.body.gravity.y = 600
@@ -60,8 +61,13 @@ export default class extends Phaser.State {
       this.game.physics.arcade.collide(this.player,this.blockedLayer)
 
       if(this.cursors.right.isDown) {
+          if(this.player.scale.x < 0) this.player.scale.x *= -1
           this.player.body.velocity.x = 100
-          this.player.animations.play('moveRight')
+          this.player.animations.play('move')
+      } else if (this.cursors.left.isDown){
+          if(this.player.scale.x > 0) this.player.scale.x *= -1
+          this.player.body.velocity.x = -100
+          this.player.animations.play('move')
       } else {
           this.player.body.velocity.x = 0
           this.player.animations.play('idle')
