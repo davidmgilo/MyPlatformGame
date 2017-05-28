@@ -6,7 +6,7 @@ export default class extends Phaser.State {
     this.stage.backgroundColor = '#1496BB'
     var height = window.innerHeight;
     var width = window.innerWidth;
-    this.resize(width,height)
+    //this.game.scale.setGameSize(width,height)
     this.fontsReady = false
     this.fontsLoaded = this.fontsLoaded.bind(this)
   }
