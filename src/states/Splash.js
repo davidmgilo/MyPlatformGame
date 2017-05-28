@@ -14,10 +14,16 @@ export default class extends Phaser.State {
     // load your assets
     //
     // this.load.image('mushroom', 'assets/images/mushroom2.png')
+    this.loadBgm()
 
   }
 
   create () {
-    this.state.start('Game')
+    this.state.start('Menu')
+  }
+
+  loadBgm () {
+    this.load.audio('intro', 'assets/music/intro.mp3');
+    // game.load.audio('exit', 'assets/bgm/Exit the Premises.mp3');
   }
 }
