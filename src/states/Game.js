@@ -3,7 +3,9 @@ import Phaser from 'phaser'
 import Mushroom from '../sprites/Mushroom'
 
 export default class extends Phaser.State {
-  init () {}
+  init () {
+      this.stage.backgroundColor = '#EDEEC9'
+  }
   preload () {
       this.game.load.tilemap('level1', './assets/tilemaps/level1.json', null, Phaser.Tilemap.TILED_JSON);
       this.game.load.image('tiles', './assets/images/tiles_spritesheet.png');
@@ -11,6 +13,7 @@ export default class extends Phaser.State {
   }
 
   create () {
+
     // const bannerText = 'Phaser + ES6 + Webpack'
     // let banner = this.add.text(this.world.centerX, this.game.height - 80, bannerText)
     // banner.font = 'Bangers'
