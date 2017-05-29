@@ -49,11 +49,12 @@ export default class extends Phaser.State {
       this.player.scale.set(0.7,0.7)
       this.player.anchor.set(0.5,0.5)
 
-      this.player.animations.add('idle',[8,9,9,10,10,11,11,12,12],8,true)
+      this.player.animations.add('idle',[8,9,9,10,10,11,11,8],8,true)
 
       this.player.animations.add('move',[0,1,2,3,4,5,6,7,8],10,true)
 
       game.physics.arcade.enable(this.player)
+      this.player.body.setSize(60, 80, 8, 0);
       this.player.body.gravity.y = 600
 
       this.player.animations.play('idle')
@@ -107,6 +108,7 @@ export default class extends Phaser.State {
   render () {
     if (__DEV__) {
        this.game.debug.spriteInfo(this.player,32,32)
+       this.game.debug.body(this.player);
     }
   }
 }
