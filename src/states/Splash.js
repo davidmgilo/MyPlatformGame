@@ -24,6 +24,7 @@ export default class extends Phaser.State {
 
   loadBgm () {
     this.load.audio('intro', 'assets/music/intro.mp3');
+    this.load.audio('grasslands', 'assets/music/grasslands.mp3');
     // game.load.audio('exit', 'assets/bgm/Exit the Premises.mp3');
   }
 }

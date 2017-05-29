@@ -58,6 +58,7 @@ export default class extends Phaser.State {
       this.player.animations.play('idle')
       //player.animations.play('attack', 60, false);
       this.cursors = game.input.keyboard.createCursorKeys();
+      this.addGameMusic()
   }
 
   update () {
@@ -94,6 +95,13 @@ export default class extends Phaser.State {
           game.camera.x += 4;
       }
   }
+
+    addGameMusic () {
+        this.game.music.stop()
+        this.game.music = game.add.audio('grasslands');
+        this.game.music.loop = true;
+        this.game.music.play();
+    }
 
   render () {
     if (__DEV__) {

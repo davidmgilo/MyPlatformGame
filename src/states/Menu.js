@@ -26,14 +26,15 @@ export default class extends Phaser.State {
   }
 
   addGameMusic () {
-    this.music = game.add.audio('intro');
-    this.music.loop = true;
-    this.music.play();
+    this.game.music = game.add.audio('intro');
+    this.game.music.loop = true;
+    this.game.music.play();
   }
 
   addOptions () {
+    var that = this
     this.addMenuOption('Start', function (target) {
-      console.log('You clicked Start!');
+      that.game.state.start('Game')
     });
     this.addMenuOption('Options', function (target) {
       console.log('You clicked Options!');
