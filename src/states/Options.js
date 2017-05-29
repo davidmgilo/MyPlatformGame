@@ -16,7 +16,6 @@ export default class extends Phaser.State {
   }
 
   create () {
-    this.addGameMusic()
     game.add.existing(this.titleText);
     game.stage.disableVisibilityChange = true;
     this.addOptions()
@@ -25,23 +24,10 @@ export default class extends Phaser.State {
   update () {
   }
 
-  addGameMusic () {
-    if(this.game.music) this.game.music.stop()
-    this.game.music = game.add.audio('intro');
-    this.game.music.loop = true;
-    this.game.music.play();
-  }
-
   addOptions () {
     var that = this
-    this.addMenuOption('Start', function (target) {
-      that.game.state.start('Game')
-    });
-    this.addMenuOption('Options', function (target) {
-      that.game.state.start('Options')
-    });
-    this.addMenuOption('Credits', function (target) {
-      console.log('You clicked Credits!');
+    this.addMenuOption('<- Back', function (target) {
+      that.game.state.start('Menu')
     });
   }
 

@@ -5,6 +5,7 @@ import Mushroom from '../sprites/Mushroom'
 export default class extends Phaser.State {
   init () {
       this.stage.backgroundColor = '#EDEEC9'
+      game.stage.disableVisibilityChange = false;
   }
   preload () {
       this.game.load.tilemap('level1', './assets/tilemaps/level1.json', null, Phaser.Tilemap.TILED_JSON);
