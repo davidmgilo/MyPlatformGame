@@ -17,6 +17,7 @@ export default class extends Phaser.State {
       this.jumpSound.addMarker('spring',0,1)
       this.game.load.image('exp','./assets/images/exp.png')
       this.game.load.image('dust','./assets/images/dust.png')
+      this.game.load.image('door','./assets/images/window.png')
   }
 
   create () {
@@ -58,6 +59,8 @@ export default class extends Phaser.State {
 
       this.player = this.game.add.sprite(300, 200, 'player');
 
+      this.door = this.game.add.sprite(1235,280,'door')
+
       this.player.scale.set(0.7,0.7)
       this.player.anchor.set(0.5,0.5)
 
@@ -70,6 +73,8 @@ export default class extends Phaser.State {
       this.player.body.gravity.y = 600
       this.player.body.collideWorldBounds = true
 
+      game.physics.arcade.enable(this.door)
+
       this.setParticles()
 
       this.player.animations.play('idle')
@@ -80,6 +85,7 @@ export default class extends Phaser.State {
 
       this.hasJumped = false
       game.camera.follow(this.player)
+      this.player.bringToTop()
   }
 
   update () {
@@ -198,6 +204,7 @@ export default class extends Phaser.State {
     if (__DEV__) {
        this.game.debug.spriteInfo(this.player,32,32)
        this.game.debug.body(this.player);
+       this.game.debug.body(this.door)
        this.coins.forEachAlive(renderGroup, this)
        function renderGroup(member) {    game.debug.body(member);}
     }
