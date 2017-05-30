@@ -16,6 +16,7 @@ export default class extends Phaser.State {
       this.jumpSound = this.game.add.audio('jump')
       this.jumpSound.addMarker('spring',0,1)
       this.game.load.image('exp','./assets/images/exp.png')
+      this.game.load.image('dust','./assets/images/dust.png')
   }
 
   create () {
@@ -76,6 +77,8 @@ export default class extends Phaser.State {
       this.cursors = game.input.keyboard.createCursorKeys();
       this.addGameMusic()
       this.addCoins()
+
+      this.hasJumped = false
       game.camera.follow(this.player)
   }
 
@@ -101,8 +104,17 @@ export default class extends Phaser.State {
           this.player.body.velocity.y = -400
           this.jumpSound.play('spring')
           this.burst.x = this.player.x
-          this.burst.y = this.player.y+40
+          this.burst.y = this.player.y+30
           this.burst.start(true, 300, null, 20)
+          this.game.time.events.add(Phaser.Timer.SECOND, this.setJumpedTrue, this);
+      }
+
+      if(this.hasJumped && this.player.body.blocked.down){
+          console.log('Entrar')
+          this.hasJumped = false
+          this.dust.x = this.player.x;
+          this.dust.y = this.player.y+30;
+          this.dust.start(true, 300, null, 8);
       }
 
       if(this.player.body.onFloor() && this.player.body.y >= this.game.world.height - this.player.height){
@@ -166,6 +178,15 @@ export default class extends Phaser.State {
         this.burst.makeParticles('exp')
         this.burst.setYSpeed(-150,0)
         this.burst.setXSpeed(-150,150)
+
+        this.dust = game.add.emitter(0, 0, 20);
+        this.dust.makeParticles('dust');
+        this.dust.setYSpeed(-100, 10);
+        this.dust.setXSpeed(-100, 50);
+    }
+
+    setJumpedTrue(){
+        this.hasJumped = true
     }
 
   render () {
