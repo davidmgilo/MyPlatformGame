@@ -11,6 +11,7 @@ export default class extends Phaser.State {
       this.game.load.tilemap('level1', './assets/tilemaps/level1.json', null, Phaser.Tilemap.TILED_JSON);
       this.game.load.image('tiles', './assets/images/tiles_spritesheet.png');
       this.game.load.spritesheet('player', 'assets/images/r1sht.png', 81, 82)
+      this.game.load.image('coin','./assets/images/coinGold.png')
   }
 
   create () {
@@ -61,10 +62,12 @@ export default class extends Phaser.State {
       //player.animations.play('attack', 60, false);
       this.cursors = game.input.keyboard.createCursorKeys();
       this.addGameMusic()
+      this.addCoins()
   }
 
   update () {
       let canJump = this.game.physics.arcade.collide(this.player,this.blockedLayer)
+      this.game.physics.arcade.collide(this.coins,this.blockedLayer)
 
       if(this.cursors.right.isDown) {
           if(this.player.scale.x < 0) this.player.scale.x *= -1
@@ -109,10 +112,31 @@ export default class extends Phaser.State {
         this.game.music.play();
     }
 
+    addCoins() {
+      this.coins = this.game.add.group()
+      this.coins.enableBody = true
+      this.createCoin(this.coins,543,540)
+      this.createCoin(this.coins,15,570)
+      this.createCoin(this.coins,770,500)
+      this.createCoin(this.coins,1090,340)
+      game.physics.arcade.enable(this.coins)
+    }
+
+    createCoin(group, x, y) {
+      let coin = this.game.add.sprite(x,y,'coin',0,group)
+      coin.scale.set(0.5,0.5)
+      coin.anchor.set(0.5,0.5)
+      coin.body.setSize(40, 40, 15, 15);
+      coin.body.gravity.y = 600
+      coin.body.bounce.y = 1
+    }
+
   render () {
     if (__DEV__) {
        this.game.debug.spriteInfo(this.player,32,32)
        this.game.debug.body(this.player);
+       this.coins.forEachAlive(renderGroup, this)
+       function renderGroup(member) {    game.debug.body(member);}
     }
   }
 }
