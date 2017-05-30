@@ -3,8 +3,8 @@ import Phaser from 'phaser'
 
 export default class extends Phaser.State {
   init () {
-    this.titleText = game.make.text(game.world.centerX, 100, "Shoot 'n Jump", {
-      font: 'bold 60pt Arial',
+    this.titleText = game.make.text(game.world.centerX, 80, "Options", {
+      font: 'bold 40pt Arial',
       fill: '#DA621E',
       align: 'center'
     });
@@ -33,7 +33,7 @@ export default class extends Phaser.State {
 
   addMenuOption (text, callback) {
     var optionStyle = { font: '30pt Arial', fill: 'white', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4};
-    var txt = game.add.text(30 + (this.optionCount * 250), 280, text, optionStyle);
+    var txt = game.add.text(30 + (this.optionCount * 250), 300, text, optionStyle);
     var onOver = function (target) {
       target.fill = "yellow";
       target.stroke = "rgba(200,200,200,0.5)";

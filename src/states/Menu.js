@@ -26,10 +26,19 @@ export default class extends Phaser.State {
   }
 
   addGameMusic () {
-    if(this.game.music) this.game.music.stop()
-    this.game.music = game.add.audio('intro');
-    this.game.music.loop = true;
-    this.game.music.play();
+    if(!this.game.music || !this.game.music.key === 'intro'){
+      if(this.game.music)this.game.music.stop()
+      this.addIntroMusic()
+    } else{
+      console.log('Ja està en marxa!!')
+    }
+      console.log(this.game.music.key)
+  }
+
+  addIntroMusic(){
+      this.game.music = game.add.audio('intro');
+      this.game.music.loop = true;
+      this.game.music.play();
   }
 
   addOptions () {
@@ -47,7 +56,7 @@ export default class extends Phaser.State {
 
   addMenuOption (text, callback) {
     var optionStyle = { font: '30pt Arial', fill: 'white', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4};
-    var txt = game.add.text(30 + (this.optionCount * 250), 280, text, optionStyle);
+    var txt = game.add.text(30 + (this.optionCount * 250), 300, text, optionStyle);
     var onOver = function (target) {
       target.fill = "yellow";
       target.stroke = "rgba(200,200,200,0.5)";

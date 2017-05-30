@@ -162,7 +162,7 @@ export default class extends Phaser.State {
       coin.anchor.set(0.5,0.5)
       coin.body.setSize(40, 40, 15, 15);
       coin.body.gravity.y = 600
-      coin.body.bounce.y = 1
+      coin.body.bounce.y = 0.9999
     }
 
     takeCoin (player, coin) {
