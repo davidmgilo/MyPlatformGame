@@ -64,7 +64,7 @@ export default class extends Phaser.State {
   }
 
   update () {
-      this.game.physics.arcade.collide(this.player,this.blockedLayer)
+      let canJump = this.game.physics.arcade.collide(this.player,this.blockedLayer)
 
       if(this.cursors.right.isDown) {
           if(this.player.scale.x < 0) this.player.scale.x *= -1
@@ -77,6 +77,10 @@ export default class extends Phaser.State {
       } else {
           this.player.body.velocity.x = 0
           this.player.animations.play('idle')
+      }
+
+      if(this.cursors.up.isDown && canJump){
+          this.player.body.velocity.y = -400
       }
 
       if (this.game.input.keyboard.isDown(Phaser.Keyboard.W))
