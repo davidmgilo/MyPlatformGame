@@ -13,6 +13,9 @@ export default class extends Phaser.State {
       this.game.load.spritesheet('player', 'assets/images/r1sht.png', 81, 82)
       this.game.load.image('coin','./assets/images/coinGold.png')
       this.coinSound = this.game.add.audio('coin')
+      this.jumpSound = this.game.add.audio('jump')
+      this.jumpSound.addMarker('spring',0,1)
+      this.game.load.image('exp','./assets/images/exp.png')
   }
 
   create () {
@@ -63,11 +66,14 @@ export default class extends Phaser.State {
       this.player.body.setSize(60, 80, 8, 0);
       this.player.body.gravity.y = 600
 
+      this.setParticles()
+
       this.player.animations.play('idle')
       //player.animations.play('attack', 60, false);
       this.cursors = game.input.keyboard.createCursorKeys();
       this.addGameMusic()
       this.addCoins()
+      game.camera.follow(this.player)
   }
 
   update () {
@@ -90,25 +96,29 @@ export default class extends Phaser.State {
 
       if(this.cursors.up.isDown && canJump){
           this.player.body.velocity.y = -400
+          this.jumpSound.play('spring')
+          this.burst.x = this.player.x
+          this.burst.y = this.player.y+40
+          this.burst.start(true, 300, null, 20)
       }
 
-      if (this.game.input.keyboard.isDown(Phaser.Keyboard.W))
-      {
-          game.camera.y -= 4;
-      }
-      else if (this.game.input.keyboard.isDown(Phaser.Keyboard.S))
-      {
-          game.camera.y += 4;
-      }
-
-      if (this.game.input.keyboard.isDown(Phaser.Keyboard.A))
-      {
-          game.camera.x -= 4;
-      }
-      else if (this.game.input.keyboard.isDown(Phaser.Keyboard.D))
-      {
-          game.camera.x += 4;
-      }
+      // if (this.game.input.keyboard.isDown(Phaser.Keyboard.W))
+      // {
+      //     game.camera.y -= 4;
+      // }
+      // else if (this.game.input.keyboard.isDown(Phaser.Keyboard.S))
+      // {
+      //     game.camera.y += 4;
+      // }
+      //
+      // if (this.game.input.keyboard.isDown(Phaser.Keyboard.A))
+      // {
+      //     game.camera.x -= 4;
+      // }
+      // else if (this.game.input.keyboard.isDown(Phaser.Keyboard.D))
+      // {
+      //     game.camera.x += 4;
+      // }
   }
 
     addGameMusic () {
@@ -142,6 +152,13 @@ export default class extends Phaser.State {
       coin.kill()
       this.score += 100
       this.scoreText.text = "Score: "+ this.score
+    }
+
+    setParticles () {
+      this.burst = game.add.emitter(0,0,10)
+        this.burst.makeParticles('exp')
+        this.burst.setYSpeed(-150,0)
+        this.burst.setXSpeed(-150,150)
     }
 
   render () {
