@@ -116,6 +116,12 @@ export default class extends Phaser.State {
           this.dust.start(true, 300, null, 8);
       }
 
+      if (this.game.input.keyboard.isDown(Phaser.Keyboard.ESC))
+      {
+          console.log('ESC')
+          this.game.paused = true
+      }
+
       if(this.player.body.onFloor() && this.player.body.y >= this.game.world.height - this.player.height){
           console.log('On floor')
       }
