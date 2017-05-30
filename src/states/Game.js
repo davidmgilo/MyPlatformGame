@@ -47,6 +47,8 @@ export default class extends Phaser.State {
       //resizes the game world to match the layer dimensions
       this.backgroundlayer.resizeWorld();
 
+      this.game.physics.setBoundsToWorld()
+
       this.map.setCollisionBetween(1, 1000, true, 'blockedLayer');
 
       this.score = 0
@@ -65,6 +67,7 @@ export default class extends Phaser.State {
       game.physics.arcade.enable(this.player)
       this.player.body.setSize(60, 80, 8, 0);
       this.player.body.gravity.y = 600
+      this.player.body.collideWorldBounds = true
 
       this.setParticles()
 
@@ -100,6 +103,10 @@ export default class extends Phaser.State {
           this.burst.x = this.player.x
           this.burst.y = this.player.y+40
           this.burst.start(true, 300, null, 20)
+      }
+
+      if(this.player.body.onFloor() && this.player.body.y >= this.game.world.height - this.player.height){
+          console.log('On floor')
       }
 
       // if (this.game.input.keyboard.isDown(Phaser.Keyboard.W))
