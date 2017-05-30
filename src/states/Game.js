@@ -12,6 +12,7 @@ export default class extends Phaser.State {
       this.game.load.image('tiles', './assets/images/tiles_spritesheet.png');
       this.game.load.spritesheet('player', 'assets/images/r1sht.png', 81, 82)
       this.game.load.image('coin','./assets/images/coinGold.png')
+      this.coinSound = this.game.add.audio('coin')
   }
 
   create () {
@@ -45,6 +46,10 @@ export default class extends Phaser.State {
 
       this.map.setCollisionBetween(1, 1000, true, 'blockedLayer');
 
+      this.score = 0
+      this.scoreText = game.add.text(8, 8, 'Score: 0', { font: '12pt Arial', fill: 'black', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4});
+      this.scoreText.fixedToCamera = true
+
       this.player = this.game.add.sprite(300, 200, 'player');
 
       this.player.scale.set(0.7,0.7)
@@ -68,6 +73,7 @@ export default class extends Phaser.State {
   update () {
       let canJump = this.game.physics.arcade.collide(this.player,this.blockedLayer)
       this.game.physics.arcade.collide(this.coins,this.blockedLayer)
+      this.game.physics.arcade.overlap(this.coins,this.player, this.takeCoin, null, this)
 
       if(this.cursors.right.isDown) {
           if(this.player.scale.x < 0) this.player.scale.x *= -1
@@ -129,6 +135,13 @@ export default class extends Phaser.State {
       coin.body.setSize(40, 40, 15, 15);
       coin.body.gravity.y = 600
       coin.body.bounce.y = 1
+    }
+
+    takeCoin (player, coin) {
+      this.coinSound.play()
+      coin.kill()
+      this.score += 100
+      this.scoreText.text = "Score: "+ this.score
     }
 
   render () {
