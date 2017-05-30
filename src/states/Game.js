@@ -110,7 +110,6 @@ export default class extends Phaser.State {
       }
 
       if(this.hasJumped && this.player.body.blocked.down){
-          console.log('Entrar')
           this.hasJumped = false
           this.dust.x = this.player.x;
           this.dust.y = this.player.y+30;
