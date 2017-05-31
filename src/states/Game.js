@@ -3,7 +3,9 @@ import Phaser from 'phaser'
 import Mushroom from '../sprites/Mushroom'
 
 export default class extends Phaser.State {
-  init () {
+  init (widt, heigh) {
+      this.gamewidth = widt
+      this.gameheight = heigh
       this.stage.backgroundColor = '#EDEEC9'
       game.stage.disableVisibilityChange = false;
   }
@@ -206,6 +208,7 @@ export default class extends Phaser.State {
 
     advance(door, player) {
         console.log('Next level')
+        this.state.start('Menu', true, false, this.gamewidth, this.gameheight)
     }
 
   render () {

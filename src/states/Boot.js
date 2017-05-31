@@ -2,7 +2,9 @@ import Phaser from 'phaser'
 import WebFont from 'webfontloader'
 
 export default class extends Phaser.State {
-  init () {
+  init (widt, heigh) {
+    this.gamewidth = widt
+    this.gameheight = heigh
     this.stage.backgroundColor = '#1496BB'
     var height = window.innerHeight;
     var width = window.innerWidth;
@@ -41,7 +43,7 @@ export default class extends Phaser.State {
 
   render () {
     if (this.fontsReady) {
-      this.state.start('Splash')
+      this.state.start('Splash', true, false, this.gamewidth, this.gameheight)
     }
   }
 

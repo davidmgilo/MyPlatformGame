@@ -2,7 +2,9 @@
 import Phaser from 'phaser'
 
 export default class extends Phaser.State {
-  init () {
+  init (widt, heigh) {
+    this.gamewidth = widt
+    this.gameheight = heigh
     this.titleText = game.make.text(game.world.centerX, 80, "Options", {
       font: 'bold 40pt Arial',
       fill: '#DA621E',
@@ -27,7 +29,7 @@ export default class extends Phaser.State {
   addOptions () {
     var that = this
     this.addMenuOption('<- Back', function (target) {
-      that.game.state.start('Menu')
+      that.game.state.start('Menu', true, false, this.gamewidth, this.gameheight)
     });
   }
 

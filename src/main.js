@@ -24,7 +24,7 @@ class Game extends Phaser.Game {
     this.state.add('Options', Options, false)
     this.state.add('Game', GameState, false)
 
-    this.state.start('Boot')
+    this.state.start('Boot', true, false, width, height)
   }
 }
 

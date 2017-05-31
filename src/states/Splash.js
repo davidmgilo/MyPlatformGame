@@ -2,7 +2,10 @@ import Phaser from 'phaser'
 import { centerGameObjects } from '../utils'
 
 export default class extends Phaser.State {
-  init () {}
+  init (widt,heigh) {
+      this.gamewidth = widt
+      this.gameheight = heigh
+  }
 
   preload () {
     this.loaderBg = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'loaderBg')
@@ -19,7 +22,7 @@ export default class extends Phaser.State {
   }
 
   create () {
-    this.state.start('Menu')
+    this.state.start('Menu', true, false, this.gamewidth, this.gameheight)
   }
 
   loadBgm () {
