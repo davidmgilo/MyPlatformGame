@@ -59,10 +59,12 @@ export default class extends Phaser.State {
 
       this.player = this.game.add.sprite(300, 200, 'player');
 
-      this.door = this.game.add.sprite(1235,280,'door')
+      this.door = this.game.add.sprite(1260,315,'door')
 
       this.player.scale.set(0.7,0.7)
       this.player.anchor.set(0.5,0.5)
+
+      this.door.anchor.set(0.5,0.5)
 
       this.player.animations.add('idle',[8,9,9,10,10,11,11,8],8,true)
 
@@ -74,6 +76,7 @@ export default class extends Phaser.State {
       this.player.body.collideWorldBounds = true
 
       game.physics.arcade.enable(this.door)
+      this.door.body.setSize(30,40,20,20);
 
       this.setParticles()
 
@@ -92,6 +95,7 @@ export default class extends Phaser.State {
       let canJump = this.game.physics.arcade.collide(this.player,this.blockedLayer)
       this.game.physics.arcade.collide(this.coins,this.blockedLayer)
       this.game.physics.arcade.overlap(this.coins,this.player, this.takeCoin, null, this)
+      this.game.physics.arcade.overlap(this.door,this.player, this.advance, null, this)
 
       if(this.cursors.right.isDown) {
           if(this.player.scale.x < 0) this.player.scale.x *= -1
@@ -198,6 +202,10 @@ export default class extends Phaser.State {
 
     setJumpedTrue(){
         this.hasJumped = true
+    }
+
+    advance(door, player) {
+        console.log('Next level')
     }
 
   render () {
