@@ -28,14 +28,20 @@ export default class extends Phaser.State {
 
   addOptions () {
     var that = this
+    this.addMenuOption(this.game.gameOptions.playMusic ? 'Mute Music' : 'Play Music', function (target) {
+      that.game.gameOptions.playMusic = !that.game.gameOptions.playMusic;
+      target.text = that.game.gameOptions.playMusic ? 'Mute Music' : 'Play Music';
+      that.game.gameOptions.musicPlayer.volume = that.game.gameOptions.playMusic ? 1 : 0;
+    });
     this.addMenuOption('<- Back', function (target) {
-      that.game.state.start('Menu', true, false, this.gamewidth, this.gameheight)
+      that.game.state.start('Menu', true, false, that.gamewidth, that.gameheight)
     });
   }
 
   addMenuOption (text, callback) {
-    var optionStyle = { font: '30pt Arial', fill: 'white', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4};
-    var txt = game.add.text(30 + (this.optionCount * 250), 300, text, optionStyle);
+    var optionStyle = { font: '24pt Arial', fill: 'white', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4};
+    var txt = game.add.text(game.world.centerX , 200 + (this.optionCount * 80), text, optionStyle);
+    txt.anchor.set(0.5);
     var onOver = function (target) {
       target.fill = "yellow";
       target.stroke = "rgba(200,200,200,0.5)";

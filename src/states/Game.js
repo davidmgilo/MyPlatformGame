@@ -158,10 +158,12 @@ export default class extends Phaser.State {
   }
 
     addGameMusic () {
-        this.game.gameOptions.musicPlayer.stop()
-        this.game.gameOptions.musicPlayer = game.add.audio('grasslands');
-        this.game.gameOptions.musicPlayer.loop = true;
-        this.game.gameOptions.musicPlayer.play();
+        if (this.game.gameOptions.musicPlayer.volume == 1){
+            this.game.gameOptions.musicPlayer.stop()
+            this.game.gameOptions.musicPlayer = game.add.audio('grasslands');
+            this.game.gameOptions.musicPlayer.loop = true;
+            this.game.gameOptions.musicPlayer.play();
+        }
     }
 
     addCoins() {
