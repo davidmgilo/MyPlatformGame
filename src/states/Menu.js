@@ -8,7 +8,7 @@ export default class extends Phaser.State {
     game.world.width = this.gamewidth
     this.stage.backgroundColor = '#1496BB'
     //this.game.renderer.resize(this.gamewidth, this.gameheight)
-    this.titleText = game.make.text(game.world.centerX, 100, "Shoot 'n Jump", {
+    this.titleText = game.make.text(game.world.centerX, this.gameheight/3, "Shoot 'n Jump", {
       font: 'bold 60pt Arial',
       fill: '#DA621E',
       align: 'center'
@@ -63,7 +63,7 @@ export default class extends Phaser.State {
 
   addMenuOption (text, callback) {
     var optionStyle = { font: '30pt Arial', fill: 'white', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4};
-    var txt = game.add.text(30 + (this.optionCount * 250), 300, text, optionStyle);
+    var txt = game.add.text(this.gamewidth/10 + (this.optionCount * this.gamewidth/3), this.gameheight/3+this.gameheight/3, text, optionStyle);
     var onOver = function (target) {
       target.fill = "yellow";
       target.stroke = "rgba(200,200,200,0.5)";

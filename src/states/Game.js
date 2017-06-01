@@ -1,11 +1,13 @@
 /* globals __DEV__ */
 import Phaser from 'phaser'
 import Mushroom from '../sprites/Mushroom'
+import config from './../config'
 
 export default class extends Phaser.State {
   init (widt, heigh) {
       this.gamewidth = widt
       this.gameheight = heigh
+      this.game.scale.setGameSize(config.gameWidth, config.gameHeight)
       this.stage.backgroundColor = '#EDEEC9'
       game.stage.disableVisibilityChange = false;
   }
