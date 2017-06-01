@@ -247,6 +247,8 @@ export default class extends Phaser.State {
         this.game.gameOptions.score = 0
         this.scoreText = game.add.text(8, 8, 'Score: 0', { font: '12pt Arial', fill: 'black', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4});
         this.scoreText.fixedToCamera = true
+        this.namelevel = game.add.text(game.camera.width/2, 8, 'Level 1', { font: '12pt Arial', fill: 'black', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4});
+        this.namelevel.fixedToCamera = true
         this.addLives()
     }
 
