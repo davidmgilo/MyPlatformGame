@@ -210,7 +210,7 @@ export default class extends Phaser.State {
 
     advance(door, player) {
         console.log('Next level')
-        this.state.start('Menu', true, false, this.gamewidth, this.gameheight)
+        this.state.start('GameOver', true, false, this.gamewidth, this.gameheight)
     }
 
   render () {
