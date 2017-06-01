@@ -39,6 +39,7 @@ export default class extends Phaser.State {
     this.game.input.keyboard.addKey(Phaser.Keyboard.S);
     this.game.input.keyboard.addKey(Phaser.Keyboard.D);
     this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+    this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     this.game.gameOptions = {
           playMusic: true,
