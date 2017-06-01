@@ -55,9 +55,7 @@ export default class extends Phaser.State {
 
       this.map.setCollisionBetween(1, 1000, true, 'blockedLayer');
 
-      this.game.gameOptions.score = 0
-      this.scoreText = game.add.text(8, 8, 'Score: 0', { font: '12pt Arial', fill: 'black', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4});
-      this.scoreText.fixedToCamera = true
+      this.addHUD()
 
       this.player = this.game.add.sprite(300, 200, 'player');
 
@@ -211,6 +209,23 @@ export default class extends Phaser.State {
     advance(door, player) {
         console.log('Next level')
         this.state.start('GameOver', true, false, this.gamewidth, this.gameheight)
+    }
+
+    addHUD(){
+        this.game.gameOptions.score = 0
+        this.scoreText = game.add.text(8, 8, 'Score: 0', { font: '12pt Arial', fill: 'black', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4});
+        this.scoreText.fixedToCamera = true
+        this.addLives()
+    }
+
+    addLives() {
+        this.lives = this.game.add.group()
+        var numberLive = this.game.gameOptions.lives
+        for(;numberLive > 0;numberLive= numberLive-1){
+            let life = this.game.add.sprite(game.camera.width-30*numberLive - 8,8,'player',0,this.lives)
+            life.scale.set(0.4,0.4)
+        }
+        this.lives.fixedToCamera = true
     }
 
   render () {

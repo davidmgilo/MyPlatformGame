@@ -7,7 +7,7 @@ export default class extends Phaser.State {
     this.gameheight = heigh
     game.world.width = this.gamewidth
     this.stage.backgroundColor = '#1496BB'
-    this.game.renderer.resize(this.gamewidth, this.gameheight)
+    //this.game.renderer.resize(this.gamewidth, this.gameheight)
     this.titleText = game.make.text(game.world.centerX, 100, "Shoot 'n Jump", {
       font: 'bold 60pt Arial',
       fill: '#DA621E',
