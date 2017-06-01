@@ -5,7 +5,7 @@ export default class extends Phaser.State {
   init (widt, heigh) {
     this.gamewidth = widt
     this.gameheight = heigh
-    this.titleText = game.make.text(game.world.centerX, 80, "Options", {
+    this.titleText = game.make.text(game.world.centerX, this.gameheight/5, "Options", {
       font: 'bold 40pt Arial',
       fill: '#DA621E',
       align: 'center'
@@ -42,7 +42,7 @@ export default class extends Phaser.State {
 
   addMenuOption (text, callback) {
     var optionStyle = { font: '24pt Arial', fill: 'white', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4};
-    var txt = game.add.text(game.world.centerX , 170 + (this.optionCount * 80), text, optionStyle);
+    var txt = game.add.text(game.world.centerX , this.gamewidth/6  + (this.optionCount * this.gamewidth/15), text, optionStyle);
     txt.anchor.set(0.5);
     var onOver = function (target) {
       target.fill = "yellow";

@@ -8,7 +8,7 @@ export default class extends Phaser.State {
     game.world.width = this.gamewidth
     this.game.scale.setGameSize(this.gamewidth,this.gameheight)
     this.stage.backgroundColor = '#000000'
-    this.titleText = game.make.text(game.world.centerX, 80, "Game Over", {
+    this.titleText = game.make.text(game.world.centerX, this.gameheight/5, "Game Over", {
       font: 'bold 40pt Arial',
       fill: '#FFFFFF',
       align: 'center'
@@ -32,6 +32,9 @@ export default class extends Phaser.State {
 
   addOptions () {
     var that = this
+    this.addMenuOption(this.game.gameOptions.lives == 0 ? 'You lose' : 'You win', function(){
+
+    }, this.game.gameOptions.lives == 0 ? 'red' : 'green')
     this.addMenuOption('Play Again', function (target) {
       that.game.state.start('Game', true, false, that.gamewidth, that.gameheight)
     });
@@ -40,9 +43,9 @@ export default class extends Phaser.State {
     });
   }
 
-  addMenuOption (text, callback) {
-    var optionStyle = { font: '24pt Arial', fill: 'white', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4};
-    var txt = game.add.text(game.world.centerX , 170 + (this.optionCount * 80), text, optionStyle);
+  addMenuOption (text, callback, finalmessage) {
+    var optionStyle = { font: '24pt Arial', fill: 'white', align: 'center', stroke: 'rgba(0,0,0,0)', strokeThickness: 4};
+    var txt = game.add.text(game.world.centerX , this.gamewidth/6  + (this.optionCount * this.gamewidth/15), text, optionStyle);
     txt.anchor.set(0.5);
     var onOver = function (target) {
       target.fill = "yellow";
@@ -54,10 +57,14 @@ export default class extends Phaser.State {
     };
     txt.stroke = "rgba(0,0,0,0";
     txt.strokeThickness = 4;
-    txt.inputEnabled = true;
-    txt.events.onInputUp.add(callback);
-    txt.events.onInputOver.add(onOver);
-    txt.events.onInputOut.add(onOut);
+    if(finalmessage){
+      txt.fill = finalmessage
+    }else {
+        txt.inputEnabled = true;
+        txt.events.onInputUp.add(callback);
+        txt.events.onInputOver.add(onOver);
+        txt.events.onInputOut.add(onOut);
+    }
     this.optionCount ++;
   }
 }
