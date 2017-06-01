@@ -33,19 +33,19 @@ export default class extends Phaser.State {
   }
 
   addGameMusic () {
-    if(!this.game.music || this.game.music.key !== 'intro'){
-      if(this.game.music)this.game.music.stop()
-      this.addIntroMusic()
-    } else{
-      console.log('Ja està en marxa!!')
-    }
-      console.log(this.game.music.key)
+    console.log(window.game)
+    // if(!this.game.gameOptions.musicPlayer || this.game.gameOptions.musicPlayer.key !== 'intro'){
+    //   if(this.game.gameOptions.musicPlayer)this.game.gameOptions.musicPlayer.stop()
+    //   this.addIntroMusic()
+    // } else{
+    //   console.log('Ja està en marxa!!')
+    // }
   }
 
   addIntroMusic(){
-      this.game.music = game.add.audio('intro');
-      this.game.music.loop = true;
-      this.game.music.play();
+      this.game.gameOptions.musicPlayer = game.add.audio('intro');
+      this.game.gameOptions.musicPlayer.loop = true;
+      this.game.gameOptions.musicPlayer.play();
   }
 
   addOptions () {

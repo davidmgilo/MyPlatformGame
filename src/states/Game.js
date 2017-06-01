@@ -55,7 +55,7 @@ export default class extends Phaser.State {
 
       this.map.setCollisionBetween(1, 1000, true, 'blockedLayer');
 
-      this.game.gameOptions.score = 0
+      //this.game.gameOptions.score = 0
       this.scoreText = game.add.text(8, 8, 'Score: 0', { font: '12pt Arial', fill: 'black', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4});
       this.scoreText.fixedToCamera = true
 
@@ -158,10 +158,10 @@ export default class extends Phaser.State {
   }
 
     addGameMusic () {
-        this.game.music.stop()
-        this.game.music = game.add.audio('grasslands');
-        this.game.music.loop = true;
-        this.game.music.play();
+        // this.game.gameOptions.musicPlayer.stop()
+        // this.game.gameOptions.musicPlayer = game.add.audio('grasslands');
+        // this.game.gameOptions.musicPlayer.loop = true;
+        // this.game.gameOptions.musicPlayer.play();
     }
 
     addCoins() {
@@ -186,8 +186,8 @@ export default class extends Phaser.State {
     takeCoin (player, coin) {
       this.coinSound.play()
       coin.kill()
-      this.game.gameOptions.score += 100
-      this.scoreText.text = "Score: "+ this.game.gameOptions.score
+      window.gameOptions.score += 100
+      this.scoreText.text = "Score: "+ window.gameOptions.score
     }
 
     setParticles () {
