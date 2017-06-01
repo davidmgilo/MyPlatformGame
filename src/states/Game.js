@@ -17,6 +17,7 @@ export default class extends Phaser.State {
       this.game.load.image('coin','./assets/images/coinGold.png')
       this.coinSound = this.game.add.audio('coin')
       this.jumpSound = this.game.add.audio('jump')
+      this.fireSound = this.game.add.audio('fire')
       this.jumpSound.addMarker('spring',0,1)
       this.game.load.image('exp','./assets/images/exp.png')
       this.game.load.image('dust','./assets/images/dust.png')
@@ -53,6 +54,9 @@ export default class extends Phaser.State {
       this.player.animations.add('idle',[8,9,9,10,10,11,11,8],8,true)
 
       this.player.animations.add('move',[0,1,2,3,4,5,6,7,8],10,true)
+      this.player.animations.add('shoot',[17,18,18,19],10,false)
+
+      this.player.events.onAnimationComplete.add(this.playIdle, this)
 
       game.physics.arcade.enable(this.player)
       this.player.body.setSize(60, 80, 8, 0);
@@ -101,7 +105,7 @@ export default class extends Phaser.State {
           this.player.animations.play('move')
       } else {
           this.player.body.velocity.x = 0
-          this.player.animations.play('idle')
+          if(this.player.animations.name !== 'shoot') this.player.animations.play('idle')
       }
 
       if(this.cursors.up.isDown && canJump){
@@ -141,15 +145,16 @@ export default class extends Phaser.State {
                   bullet.anchor.set(0.5, 0.5)
                   bullet.body.setSize(bullet.body.height, bullet.body.width, -7, 7)
                   bullet.angle = 90
-                  this.canShoot = false
               } else {
                   let bullet = this.game.add.sprite(this.player.x - 30, this.player.y, 'bullet', 0, this.bullets)
                   bullet.events.onOutOfBounds.add(this.destroyBullet, this);
                   bullet.anchor.set(0.5, 0.5)
                   bullet.body.setSize(bullet.body.height, bullet.body.width, -7, 7)
                   bullet.angle = 270
-                  this.canShoot = false
               }
+              this.player.animations.play('shoot')
+              this.fireSound.play()
+              this.canShoot = false
           }
       }
 
@@ -260,6 +265,12 @@ export default class extends Phaser.State {
             bullet.x = bullet.x +5
         } else{
             bullet.x = bullet.x -5
+        }
+    }
+
+    playIdle(){
+        if(this.player.animations.name == 'shoot') {
+            this.player.animations.play('idle')
         }
     }
 
