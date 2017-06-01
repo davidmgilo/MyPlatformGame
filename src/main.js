@@ -29,3 +29,8 @@ class Game extends Phaser.Game {
 }
 
 window.game = new Game()
+
+window.game.gameOptions = {
+  playMusic: true,
+  score: 0
+}

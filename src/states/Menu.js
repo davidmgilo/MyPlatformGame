@@ -33,7 +33,7 @@ export default class extends Phaser.State {
   }
 
   addGameMusic () {
-    if(!this.game.music || !this.game.music.key === 'intro'){
+    if(!this.game.music || this.game.music.key !== 'intro'){
       if(this.game.music)this.game.music.stop()
       this.addIntroMusic()
     } else{
