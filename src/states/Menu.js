@@ -33,13 +33,12 @@ export default class extends Phaser.State {
   }
 
   addGameMusic () {
-    console.log(window.game)
-    // if(!this.game.gameOptions.musicPlayer || this.game.gameOptions.musicPlayer.key !== 'intro'){
-    //   if(this.game.gameOptions.musicPlayer)this.game.gameOptions.musicPlayer.stop()
-    //   this.addIntroMusic()
-    // } else{
-    //   console.log('Ja està en marxa!!')
-    // }
+    if(!this.game.gameOptions.musicPlayer || this.game.gameOptions.musicPlayer.key !== 'intro'){
+      if(this.game.gameOptions.musicPlayer)this.game.gameOptions.musicPlayer.stop()
+      this.addIntroMusic()
+    } else{
+      console.log('Ja està en marxa!!')
+    }
   }
 
   addIntroMusic(){
