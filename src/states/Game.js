@@ -40,9 +40,10 @@ export default class extends Phaser.State {
 
       this.map.setCollisionBetween(1, 1000, true, 'blockedLayer');
 
+      this.game.gameOptions.lives = 3
       this.addHUD()
 
-      this.player = this.game.add.sprite(300, 200, 'player');
+      this.spawnPlayer()
 
       this.door = this.game.add.sprite(1260,315,'door')
 
@@ -89,6 +90,7 @@ export default class extends Phaser.State {
   }
 
   update () {
+      console.log(this.game.gameOptions)
       let canJump = this.game.physics.arcade.collide(this.player,this.blockedLayer)
       this.game.physics.arcade.collide(this.coins,this.blockedLayer)
       this.game.physics.arcade.overlap(this.coins,this.player, this.takeCoin, null, this)
@@ -161,7 +163,7 @@ export default class extends Phaser.State {
       this.bullets.forEachAlive(this.moveBullet, this)
 
       if(this.player.body.onFloor() && this.player.body.y >= this.game.world.height - this.player.height){
-          console.log('On floor')
+          this.die()
       }
 
       // if (this.game.input.keyboard.isDown(Phaser.Keyboard.W))
@@ -182,6 +184,39 @@ export default class extends Phaser.State {
       //     game.camera.x += 4;
       // }
   }
+
+    die (){
+        game.camera.shake(0.05,200)
+        // So de morir
+        // this.deadSound.play()
+        // Descomptar vides
+        // Tornar a colocar usuari en posicio inicial
+        this.playerIsDead = true
+
+        // this.explosion.x = this.player.x
+        // this.explosion.y = this.player.y+10
+        // this.explosion.start(true, 300, null, 20)
+        this.game.gameOptions.lives -= 1
+        if(this.game.gameOptions.lives == 0){
+            game.time.events.add(Phaser.Timer.SECOND * 0.3, this.gameOver, this);
+        }else {
+            this.lives.forEach(function (elem) {
+                elem.kill()
+            })
+            this.addLives()
+            this.spawnPlayer()
+        }
+    }
+
+    spawnPlayer () {
+        if(this.playerIsDead){
+            this.player.x = 300
+            this.player.y = 200
+        }else {
+            this.player = this.game.add.sprite(300, 200, 'player');
+        }
+        this.playerIsDead = false
+    }
 
     addGameMusic () {
         if (this.game.gameOptions.musicPlayer.volume == 1){
@@ -274,6 +309,10 @@ export default class extends Phaser.State {
         if(this.player.animations.name == 'shoot') {
             this.player.animations.play('idle')
         }
+    }
+
+    gameOver(){
+      this.state.start('GameOver', true, false, this.gamewidth, this.gameheight)
     }
 
   render () {

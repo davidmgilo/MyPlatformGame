@@ -5,7 +5,6 @@ export default class extends Phaser.State {
   init (widt, heigh) {
     this.gamewidth = widt
     this.gameheight = heigh
-    game.world.width = this.gamewidth
     this.game.scale.setGameSize(this.gamewidth,this.gameheight)
     this.stage.backgroundColor = '#000000'
     this.titleText = game.make.text(game.world.centerX, this.gameheight/5, "Game Over", {
