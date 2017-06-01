@@ -25,6 +25,7 @@
     "webpack": "^2.5.0"
   },
   "dependencies": {
+    "font-awesome": "^4.7.0",
     "phaser-ce": "^2.7.7",
     "webfontloader": "^1.6.27"
   }

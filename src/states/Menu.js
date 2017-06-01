@@ -57,6 +57,7 @@ export default class extends Phaser.State {
     });
     this.addMenuOption('Credits', function (target) {
       console.log('You clicked Credits!');
+      window.location = "http://github.com"
     });
   }
 
