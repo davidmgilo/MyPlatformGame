@@ -7,7 +7,7 @@ export default class extends Phaser.State {
     this.gameheight = heigh
     this.game.scale.setGameSize(this.gamewidth,this.gameheight)
     this.stage.backgroundColor = '#000000'
-    this.titleText = game.make.text(game.world.centerX, this.gameheight/5, "Game Over", {
+    this.titleText = game.make.text(this.gamewidth/2, this.gameheight/5, "Game Over", {
       font: 'bold 40pt Arial',
       fill: '#FFFFFF',
       align: 'center'
@@ -44,7 +44,7 @@ export default class extends Phaser.State {
 
   addMenuOption (text, callback, finalmessage) {
     var optionStyle = { font: '24pt Arial', fill: 'white', align: 'center', stroke: 'rgba(0,0,0,0)', strokeThickness: 4};
-    var txt = game.add.text(game.world.centerX , this.gamewidth/6  + (this.optionCount * this.gamewidth/15), text, optionStyle);
+    var txt = game.add.text(this.gamewidth/2 , this.gameheight/3  + (this.optionCount * this.gameheight/9), text, optionStyle);
     txt.anchor.set(0.5);
     var onOver = function (target) {
       target.fill = "yellow";

@@ -29,6 +29,8 @@ export default class extends Phaser.State {
   }
 
   create () {
+      this.touchable = 'createTouch' in document;
+
       this.map = this.game.add.tilemap('level1');
       this.map.addTilesetImage('tiles','tiles');
 
@@ -98,6 +100,11 @@ export default class extends Phaser.State {
       this.hasJumped = false
       game.camera.follow(this.player)
       this.player.bringToTop()
+
+      if(this.touchable){
+          this.addVirtualJoysticks()
+      }
+
   }
 
   update () {
@@ -110,11 +117,11 @@ export default class extends Phaser.State {
       this.game.physics.arcade.overlap(this.enemy,this.bullets, this.killEnemy, null, this)
 
 
-      if(this.cursors.right.isDown) {
+      if(this.cursors.right.isDown || (this.touchable && this.joystickleft.right())) {
           if(this.player.scale.x < 0) this.player.scale.x *= -1
           this.player.body.velocity.x = 100
           this.player.animations.play('move')
-      } else if (this.cursors.left.isDown){
+      } else if (this.cursors.left.isDown || (this.touchable && this.joystickleft.left())){
           if(this.player.scale.x > 0) this.player.scale.x *= -1
           this.player.body.velocity.x = -100
           this.player.animations.play('move')
@@ -123,7 +130,7 @@ export default class extends Phaser.State {
           if(this.player.animations.name !== 'shoot') this.player.animations.play('idle')
       }
 
-      if(this.cursors.up.isDown && canJump){
+      if(this.cursors.up.isDown && canJump || (this.touchable && this.joystickleft.up() && canJump)){
           this.player.body.velocity.y = -400
           if(this.game.gameOptions.playSound) this.jumpSound.play('spring')
           this.burst.x = this.player.x
@@ -139,39 +146,18 @@ export default class extends Phaser.State {
           this.dust.start(true, 300, null, 8);
       }
 
-      if (this.game.input.keyboard.isDown(Phaser.Keyboard.ESC))
-      {
-          console.log('ESC')
-          this.game.paused = true
-      }
-
       this.canShootTimer = this.canShootTimer - (1/60)
       if(this.canShootTimer < 0){
           this.canShoot = true
           this.canShootTimer = this.canShootTimerMax
       }
 
-      if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
-      {
-          if(this.canShoot){
-              if(this.player.scale.x > 0) {
-                  let bullet = this.game.add.sprite(this.player.x + 30, this.player.y, 'bullet', 0, this.bullets)
-                  bullet.events.onOutOfBounds.add(this.destroyBullet, this);
-                  bullet.anchor.set(0.5, 0.5)
-                  bullet.body.setSize(bullet.body.height, bullet.body.width, -7, 7)
-                  bullet.angle = 90
-              } else {
-                  let bullet = this.game.add.sprite(this.player.x - 30, this.player.y, 'bullet', 0, this.bullets)
-                  bullet.events.onOutOfBounds.add(this.destroyBullet, this);
-                  bullet.anchor.set(0.5, 0.5)
-                  bullet.body.setSize(bullet.body.height, bullet.body.width, -7, 7)
-                  bullet.angle = 270
-              }
-              this.player.animations.play('shoot')
-              if(this.game.gameOptions.playSound) this.fireSound.play()
-              this.canShoot = false
-          }
-      }
+      if(this.touchable) this.joystickright.addEventListener('touchStart',this.shoot,false)
+
+      // if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) || (this.touchable && this.joystickright.up() ||this.joystickright.down() || this.joystickright.left() || this.joystickright.right()))
+      // {
+      //     this.shoot()
+      // }
 
       this.bullets.forEachAlive(this.moveBullet, this)
 
@@ -345,15 +331,65 @@ export default class extends Phaser.State {
         if(this.game.gameOptions.playSound)this.explosionSound.play()
     }
 
+    addVirtualJoysticks() {
+        this.joystickleft	= new VirtualJoystick({
+            container	: document.body,
+            strokeStyle	: 'cyan',
+            limitStickTravel: true,
+            stickRadius	: 120,
+        });
+        this.joystickleft.addEventListener('touchStartValidation', function(event){
+            var touch	= event.changedTouches[0];
+            if( touch.pageX > window.innerWidth/2 )	return false;
+            return true
+        });
+
+        this.joystickright	= new VirtualJoystick({
+            container	: document.body,
+            strokeStyle	: 'orange',
+            limitStickTravel: true,
+            stickRadius	: 1
+        });
+        this.joystickright.addEventListener('touchStartValidation', function(event){
+            var touch	= event.changedTouches[0];
+            if( touch.pageX <= window.innerWidth/2 )	return false;
+            return true
+        });
+        // joystick.addEventListener('touchStart', function(){
+        //     console.log('fire')
+        // })
+    }
+
+    shoot () {
+        if(this.canShoot){
+            if(this.player.scale.x > 0) {
+                let bullet = this.game.add.sprite(this.player.x + 30, this.player.y, 'bullet', 0, this.bullets)
+                bullet.events.onOutOfBounds.add(this.destroyBullet, this);
+                bullet.anchor.set(0.5, 0.5)
+                bullet.body.setSize(bullet.body.height, bullet.body.width, -7, 7)
+                bullet.angle = 90
+            } else {
+                let bullet = this.game.add.sprite(this.player.x - 30, this.player.y, 'bullet', 0, this.bullets)
+                bullet.events.onOutOfBounds.add(this.destroyBullet, this);
+                bullet.anchor.set(0.5, 0.5)
+                bullet.body.setSize(bullet.body.height, bullet.body.width, -7, 7)
+                bullet.angle = 270
+            }
+            this.player.animations.play('shoot')
+            if(this.game.gameOptions.playSound) this.fireSound.play()
+            this.canShoot = false
+        }
+    }
+
   render () {
     if (__DEV__) {
-       this.game.debug.spriteInfo(this.player,32,32)
-       this.game.debug.body(this.player);
-       this.game.debug.body(this.door)
-       this.game.debug.body(this.enemy)
-       this.coins.forEachAlive(renderGroup, this)
+       // this.game.debug.spriteInfo(this.player,32,32)
+       // this.game.debug.body(this.player);
+       // this.game.debug.body(this.door)
+       // this.game.debug.body(this.enemy)
+       // this.coins.forEachAlive(renderGroup, this)
        // this.bullets.forEachAlive(renderGroup, this)
-       function renderGroup(member) {    game.debug.body(member);}
+       // function renderGroup(member) {    game.debug.body(member);}
     }
   }
 }
