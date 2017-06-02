@@ -2,6 +2,8 @@
 import Phaser from 'phaser'
 import config from './../config'
 
+var that1
+
 export default class extends Phaser.State {
   init (widt, heigh) {
       this.gamewidth = widt
@@ -103,6 +105,27 @@ export default class extends Phaser.State {
 
       if(this.touchable){
           this.addVirtualJoysticks()
+          that1=this
+          this.joystickright.addEventListener('touchStart', function() {
+              if(that1.canShoot){
+                  if(that1.player.scale.x > 0) {
+                      let bullet = that1.game.add.sprite(that1.player.x + 30, that1.player.y, 'bullet', 0, that1.bullets)
+                      bullet.events.onOutOfBounds.add(that1.destroyBullet, that1);
+                      bullet.anchor.set(0.5, 0.5)
+                      bullet.body.setSize(bullet.body.height, bullet.body.width, -7, 7)
+                      bullet.angle = 90
+                  } else {
+                      let bullet = that1.game.add.sprite(that1.player.x - 30, that1.player.y, 'bullet', 0, that1.bullets)
+                      bullet.events.onOutOfBounds.add(that1.destroyBullet, that1);
+                      bullet.anchor.set(0.5, 0.5)
+                      bullet.body.setSize(bullet.body.height, bullet.body.width, -7, 7)
+                      bullet.angle = 270
+                  }
+                  that1.player.animations.play('shoot')
+                  if(that1.game.gameOptions.playSound) that1.fireSound.play()
+                  that1.canShoot = false
+              }
+          }, false)
       }
 
   }
@@ -152,12 +175,10 @@ export default class extends Phaser.State {
           this.canShootTimer = this.canShootTimerMax
       }
 
-      if(this.touchable) this.joystickright.addEventListener('touchStart',this.shoot,false)
-
-      // if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) || (this.touchable && this.joystickright.up() ||this.joystickright.down() || this.joystickright.left() || this.joystickright.right()))
-      // {
-      //     this.shoot()
-      // }
+      if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+      {
+          this.shoot()
+      }
 
       this.bullets.forEachAlive(this.moveBullet, this)
 
@@ -355,9 +376,6 @@ export default class extends Phaser.State {
             if( touch.pageX <= window.innerWidth/2 )	return false;
             return true
         });
-        // joystick.addEventListener('touchStart', function(){
-        //     console.log('fire')
-        // })
     }
 
     shoot () {
