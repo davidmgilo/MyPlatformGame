@@ -125,7 +125,7 @@ export default class extends Phaser.State {
 
       if(this.cursors.up.isDown && canJump){
           this.player.body.velocity.y = -400
-          this.jumpSound.play('spring')
+          if(this.game.gameOptions.playSound) this.jumpSound.play('spring')
           this.burst.x = this.player.x
           this.burst.y = this.player.y+30
           this.burst.start(true, 300, null, 20)
@@ -168,7 +168,7 @@ export default class extends Phaser.State {
                   bullet.angle = 270
               }
               this.player.animations.play('shoot')
-              this.fireSound.play()
+              if(this.game.gameOptions.playSound) this.fireSound.play()
               this.canShoot = false
           }
       }
@@ -207,7 +207,7 @@ export default class extends Phaser.State {
 
     die (){
         game.camera.shake(0.05,200)
-        this.deadSound.play()
+        if(this.game.gameOptions.playSound) this.deadSound.play()
         this.playerIsDead = true
         this.game.gameOptions.lives -= 1
         if(this.game.gameOptions.lives == 0){
@@ -260,7 +260,7 @@ export default class extends Phaser.State {
     }
 
     takeCoin (player, coin) {
-      this.coinSound.play()
+        if(this.game.gameOptions.playSound) this.coinSound.play()
       coin.kill()
       this.game.gameOptions.score += 100
       this.scoreText.text = "Score: "+ this.game.gameOptions.score
@@ -342,7 +342,7 @@ export default class extends Phaser.State {
         this.burst.start(true, 300, null, 80)
         enemy.kill()
         this.destroyBullet(bullet)
-        this.explosionSound.play()
+        if(this.game.gameOptions.playSound)this.explosionSound.play()
     }
 
   render () {

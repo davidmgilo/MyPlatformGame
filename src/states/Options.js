@@ -33,7 +33,9 @@ export default class extends Phaser.State {
       target.text = that.game.gameOptions.playMusic ? 'Mute Music' : 'Play Music';
       that.game.gameOptions.musicPlayer.volume = that.game.gameOptions.playMusic ? 1 : 0;
     });
-    this.addMenuOption('Mute Sound', function (target) {
+    this.addMenuOption(this.game.gameOptions.playSound ? 'Mute Sound' : 'Play Sound', function (target) {
+      that.game.gameOptions.playSound = !that.game.gameOptions.playSound;
+      target.text = that.game.gameOptions.playSound ? 'Mute Sound' : 'Play Sound';
     });
     this.addMenuOption("<- Back", function (target) {
       that.game.state.start('Menu', true, false, that.gamewidth, that.gameheight)

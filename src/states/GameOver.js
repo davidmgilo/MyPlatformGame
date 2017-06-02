@@ -31,9 +31,9 @@ export default class extends Phaser.State {
 
   addOptions () {
     var that = this
-    this.addMenuOption(this.game.gameOptions.lives == 0 ? 'You lose' : 'You win', function(){
+    this.addMenuOption(this.game.gameOptions.lives <= 0 ? 'You lose' : 'You win', function(){
 
-    }, this.game.gameOptions.lives == 0 ? 'red' : 'green')
+    }, this.game.gameOptions.lives <= 0 ? 'red' : 'green')
     this.addMenuOption('Play Again', function (target) {
       that.game.state.start('Game', true, false, that.gamewidth, that.gameheight)
     });

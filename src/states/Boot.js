@@ -43,6 +43,7 @@ export default class extends Phaser.State {
 
     this.game.gameOptions = {
           playMusic: true,
+          playSound: true,
           musicPlayer: null,
           score: 0,
           lives: 3
