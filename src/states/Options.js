@@ -44,7 +44,7 @@ export default class extends Phaser.State {
 
   addMenuOption (text, callback) {
     var optionStyle = { font: '24pt Arial', fill: 'white', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4};
-    var txt = game.add.text(this.gamewidth/2 , this.gameheight/3  + (this.optionCount * this.gameheight/8), text, optionStyle);
+    var txt = game.add.text(this.gamewidth/2 , this.gameheight/3  + (this.optionCount * this.gameheight/6), text, optionStyle);
     txt.anchor.set(0.5);
     var onOver = function (target) {
       target.fill = "yellow";

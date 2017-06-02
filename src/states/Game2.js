@@ -8,33 +8,22 @@ export default class extends Phaser.State {
   init (widt, heigh) {
       this.gamewidth = widt
       this.gameheight = heigh
-      this.game.scale.setGameSize(config.gameWidth, config.gameHeight)
-      this.stage.backgroundColor = '#EDEEC9'
-      game.stage.disableVisibilityChange = false;
   }
   preload () {
-      this.game.load.tilemap('level1', './assets/tilemaps/level1.json', null, Phaser.Tilemap.TILED_JSON);
-      this.game.load.image('tiles', './assets/images/tiles_spritesheet.png');
-      this.game.load.spritesheet('player', 'assets/images/r1sht.png', 81, 82)
-      this.game.load.image('coin','./assets/images/coinGold.png')
+      this.game.load.tilemap('level2', './assets/tilemaps/level2.json', null, Phaser.Tilemap.TILED_JSON);
       this.coinSound = this.game.add.audio('coin')
       this.jumpSound = this.game.add.audio('jump')
       this.fireSound = this.game.add.audio('fire')
       this.deadSound = this.game.add.audio('dead')
       this.explosionSound = this.game.add.audio('explosion')
       this.jumpSound.addMarker('spring',0,1)
-      this.game.load.image('exp','./assets/images/exp.png')
-      this.game.load.image('dust','./assets/images/dust.png')
-      this.game.load.image('door','./assets/images/window.png')
-      this.game.load.image('bullet','./assets/images/bullet_2_blue.png')
-      this.game.load.atlas('enemy','./assets/images/Enemies/enemy.png','./assets/images/Enemies/enemy.json')
   }
 
   create () {
       this.touchable = 'createTouch' in document;
 
-      this.map = this.game.add.tilemap('level1');
-      this.map.addTilesetImage('tiles','tiles');
+      this.map = this.game.add.tilemap('level2');
+      this.map.addTilesetImage('tiles_spritesheet','tiles');
 
       //create layer
       this.backgroundlayer = this.map.createLayer('backgroundLayer');
@@ -47,12 +36,11 @@ export default class extends Phaser.State {
 
       this.map.setCollisionBetween(1, 1000, true, 'blockedLayer');
 
-      this.game.gameOptions.lives = 3
       this.addHUD()
 
       this.spawnPlayer()
 
-      this.door = this.game.add.sprite(1260,315,'door')
+      this.door = this.game.add.sprite(272,174,'door')
 
       this.player.scale.set(0.7,0.7)
       this.player.anchor.set(0.5,0.5)
@@ -77,19 +65,26 @@ export default class extends Phaser.State {
       this.setParticles()
 
       this.player.animations.play('idle')
-      //player.animations.play('attack', 60, false);
       this.cursors = game.input.keyboard.createCursorKeys();
-      this.addGameMusic()
       this.addCoins()
 
-      this.enemy = this.game.add.sprite(750,554,'enemy')
+      this.enemy = this.game.add.sprite(40,764,'enemy')
       this.enemy.animations.add('move',Phaser.Animation.generateFrameNames('slime'),5,true)
       this.enemy.animations.play('move')
       game.physics.arcade.enable(this.enemy)
       this.enemy.scale.set(0.5,0.5)
       this.enemy.anchor.set(0.5,0.5)
-      this.enemy.maxX = 810
-      this.enemy.minX = 720
+      this.enemy.maxX = 60
+      this.enemy.minX = 20
+
+      this.enemy2 = this.game.add.sprite(700,554,'enemy')
+      this.enemy2.animations.add('move',Phaser.Animation.generateFrameNames('slime'),5,true)
+      this.enemy2.animations.play('move')
+      game.physics.arcade.enable(this.enemy2)
+      this.enemy2.scale.set(0.5,0.5)
+      this.enemy2.anchor.set(0.5,0.5)
+      this.enemy2.maxX = 900
+      this.enemy2.minX = 600
 
       this.canShoot = true
       this.canShootTimerMax = 0.2
@@ -131,12 +126,15 @@ export default class extends Phaser.State {
   }
 
   update () {
+      // console.log(this.game.gameOptions)
       let canJump = this.game.physics.arcade.collide(this.player,this.blockedLayer)
       this.game.physics.arcade.collide(this.coins,this.blockedLayer)
       this.game.physics.arcade.overlap(this.coins,this.player, this.takeCoin, null, this)
       this.game.physics.arcade.overlap(this.door,this.player, this.advance, null, this)
       this.game.physics.arcade.overlap(this.enemy,this.player, this.die, null, this)
+      this.game.physics.arcade.overlap(this.enemy2,this.player, this.die, null, this)
       this.game.physics.arcade.overlap(this.enemy,this.bullets, this.killEnemy, null, this)
+      this.game.physics.arcade.overlap(this.enemy2,this.bullets, this.killEnemy, null, this)
 
 
       if(this.cursors.right.isDown || (this.touchable && this.joystickleft.right())) {
@@ -192,23 +190,30 @@ export default class extends Phaser.State {
           this.moveEnemy(this.enemy)
       }
 
-      // if (this.game.input.keyboard.isDown(Phaser.Keyboard.W))
-      // {
-      //     game.camera.y -= 4;
-      // }
-      // else if (this.game.input.keyboard.isDown(Phaser.Keyboard.S))
-      // {
-      //     game.camera.y += 4;
-      // }
-      //
-      // if (this.game.input.keyboard.isDown(Phaser.Keyboard.A))
-      // {
-      //     game.camera.x -= 4;
-      // }
-      // else if (this.game.input.keyboard.isDown(Phaser.Keyboard.D))
-      // {
-      //     game.camera.x += 4;
-      // }
+      if(this.enemy2.x >= this.enemy2.maxX || this.enemy2.x <= this.enemy2.minX){
+          this.enemy2.scale.x *= -1
+          this.moveEnemy(this.enemy2)
+      } else {
+          this.moveEnemy(this.enemy2)
+      }
+
+      if (this.game.input.keyboard.isDown(Phaser.Keyboard.W))
+      {
+          game.camera.y -= 4;
+      }
+      else if (this.game.input.keyboard.isDown(Phaser.Keyboard.S))
+      {
+          game.camera.y += 4;
+      }
+
+      if (this.game.input.keyboard.isDown(Phaser.Keyboard.A))
+      {
+          game.camera.x -= 4;
+      }
+      else if (this.game.input.keyboard.isDown(Phaser.Keyboard.D))
+      {
+          game.camera.x += 4;
+      }
   }
 
     die (){
@@ -230,20 +235,11 @@ export default class extends Phaser.State {
     spawnPlayer () {
         if(this.playerIsDead){
             this.player.x = 300
-            this.player.y = 200
+            this.player.y = 550
         }else {
-            this.player = this.game.add.sprite(300, 200, 'player');
+            this.player = this.game.add.sprite(300, 550, 'player');
         }
         this.playerIsDead = false
-    }
-
-    addGameMusic () {
-        if (this.game.gameOptions.musicPlayer.volume == 1){
-            this.game.gameOptions.musicPlayer.stop()
-            this.game.gameOptions.musicPlayer = game.add.audio('grasslands');
-            this.game.gameOptions.musicPlayer.loop = true;
-            this.game.gameOptions.musicPlayer.play();
-        }
     }
 
     addCoins() {
@@ -294,14 +290,13 @@ export default class extends Phaser.State {
 
     advance(door, player) {
         console.log('Next level')
-        this.state.start('Game2', true, false, this.gamewidth, this.gameheight)
+        this.state.start('GameOver', true, false, this.gamewidth, this.gameheight)
     }
 
     addHUD(){
-        this.game.gameOptions.score = 0
-        this.scoreText = game.add.text(8, 8, 'Score: 0', { font: '12pt Arial', fill: 'black', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4});
+        this.scoreText = game.add.text(8, 8, 'Score: ' + this.game.gameOptions.score, { font: '12pt Arial', fill: 'black', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4});
         this.scoreText.fixedToCamera = true
-        this.namelevel = game.add.text(game.camera.width/2, 8, 'Level 1', { font: '12pt Arial', fill: 'black', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4});
+        this.namelevel = game.add.text(game.camera.width/2, 8, 'Level 2', { font: '12pt Arial', fill: 'black', align: 'left', stroke: 'rgba(0,0,0,0)', strokeThickness: 4});
         this.namelevel.fixedToCamera = true
         this.addLives()
     }
@@ -343,8 +338,8 @@ export default class extends Phaser.State {
     }
 
     killEnemy(enemy, bullet){
-        this.burst.x = this.enemy.x
-        this.burst.y = this.enemy.y
+        this.burst.x = enemy.x
+        this.burst.y = enemy.y
         this.burst.start(true, 300, null, 80)
         enemy.kill()
         this.destroyBullet(bullet)
@@ -400,8 +395,8 @@ export default class extends Phaser.State {
 
   render () {
     if (__DEV__) {
-       // this.game.debug.spriteInfo(this.player,32,32)
-       // this.game.debug.body(this.player);
+        //this.game.debug.spriteInfo(this.player,32,32)
+        //this.game.debug.body(this.player);
        // this.game.debug.body(this.door)
        // this.game.debug.body(this.enemy)
        // this.coins.forEachAlive(renderGroup, this)
