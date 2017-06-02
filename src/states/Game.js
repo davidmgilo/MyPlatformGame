@@ -18,6 +18,8 @@ export default class extends Phaser.State {
       this.coinSound = this.game.add.audio('coin')
       this.jumpSound = this.game.add.audio('jump')
       this.fireSound = this.game.add.audio('fire')
+      this.deadSound = this.game.add.audio('dead')
+      this.explosionSound = this.game.add.audio('explosion')
       this.jumpSound.addMarker('spring',0,1)
       this.game.load.image('exp','./assets/images/exp.png')
       this.game.load.image('dust','./assets/images/dust.png')
@@ -104,6 +106,8 @@ export default class extends Phaser.State {
       this.game.physics.arcade.collide(this.coins,this.blockedLayer)
       this.game.physics.arcade.overlap(this.coins,this.player, this.takeCoin, null, this)
       this.game.physics.arcade.overlap(this.door,this.player, this.advance, null, this)
+      this.game.physics.arcade.overlap(this.enemy,this.player, this.die, null, this)
+      this.game.physics.arcade.overlap(this.enemy,this.bullets, this.killEnemy, null, this)
 
 
       if(this.cursors.right.isDown) {
@@ -203,15 +207,8 @@ export default class extends Phaser.State {
 
     die (){
         game.camera.shake(0.05,200)
-        // So de morir
-        // this.deadSound.play()
-        // Descomptar vides
-        // Tornar a colocar usuari en posicio inicial
+        this.deadSound.play()
         this.playerIsDead = true
-
-        // this.explosion.x = this.player.x
-        // this.explosion.y = this.player.y+10
-        // this.explosion.start(true, 300, null, 20)
         this.game.gameOptions.lives -= 1
         if(this.game.gameOptions.lives == 0){
             game.time.events.add(Phaser.Timer.SECOND * 0.3, this.gameOver, this);
@@ -337,6 +334,15 @@ export default class extends Phaser.State {
         } else {
             enemy.x += 1
         }
+    }
+
+    killEnemy(enemy, bullet){
+        this.burst.x = this.enemy.x
+        this.burst.y = this.enemy.y
+        this.burst.start(true, 300, null, 80)
+        enemy.kill()
+        this.destroyBullet(bullet)
+        this.explosionSound.play()
     }
 
   render () {

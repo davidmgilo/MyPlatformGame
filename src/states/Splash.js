@@ -31,6 +31,8 @@ export default class extends Phaser.State {
     this.load.audio('coin', 'assets/music/pickedCoin.wav');
     this.load.audio('jump', 'assets/music/sound-plasticknife.mp3');
     this.load.audio('fire', 'assets/music/laser1.wav');
+    this.load.audio('dead', 'assets/music/dead.mp3');
+    this.load.audio('explosion', 'assets/music/explosion.wav');
     // game.load.audio('exit', 'assets/bgm/Exit the Premises.mp3');
   }
 }
