@@ -23,6 +23,7 @@ export default class extends Phaser.State {
       this.game.load.image('dust','./assets/images/dust.png')
       this.game.load.image('door','./assets/images/window.png')
       this.game.load.image('bullet','./assets/images/bullet_2_blue.png')
+      this.game.load.atlas('enemy','./assets/images/Enemies/enemy.png','./assets/images/Enemies/enemy.json')
   }
 
   create () {
@@ -75,6 +76,14 @@ export default class extends Phaser.State {
       this.addGameMusic()
       this.addCoins()
 
+      this.enemy = this.game.add.sprite(750,554,'enemy')
+      this.enemy.animations.add('move',Phaser.Animation.generateFrameNames('slime'),5,true)
+      this.enemy.animations.play('move')
+      game.physics.arcade.enable(this.enemy)
+      this.enemy.scale.set(0.5,0.5)
+      this.enemy.anchor.set(0.5,0.5)
+      this.enemy.maxX = 810
+      this.enemy.minX = 720
 
       this.canShoot = true
       this.canShootTimerMax = 0.2
@@ -164,6 +173,13 @@ export default class extends Phaser.State {
 
       if(this.player.body.onFloor() && this.player.body.y >= this.game.world.height - this.player.height){
           this.die()
+      }
+
+      if(this.enemy.x == this.enemy.maxX || this.enemy.x == this.enemy.minX){
+          this.enemy.scale.x *= -1
+          this.moveEnemy(this.enemy)
+      } else {
+          this.moveEnemy(this.enemy)
       }
 
       // if (this.game.input.keyboard.isDown(Phaser.Keyboard.W))
@@ -315,11 +331,20 @@ export default class extends Phaser.State {
       this.state.start('GameOver', true, false, this.gamewidth, this.gameheight)
     }
 
+    moveEnemy(enemy){
+        if(enemy.scale.x > 0) {
+            enemy.x -= 1
+        } else {
+            enemy.x += 1
+        }
+    }
+
   render () {
     if (__DEV__) {
        this.game.debug.spriteInfo(this.player,32,32)
        this.game.debug.body(this.player);
        this.game.debug.body(this.door)
+       this.game.debug.body(this.enemy)
        this.coins.forEachAlive(renderGroup, this)
        // this.bullets.forEachAlive(renderGroup, this)
        function renderGroup(member) {    game.debug.body(member);}
